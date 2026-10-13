@@ -2,7 +2,7 @@
 
 ### Seis tipos de bairro, uma estratégia para cada um
 
-[![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SEU-USUARIO/mba-fgv-clusterizacao-imobiliaria/blob/main/projetofinal.ipynb)
+[![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YanSamuray/mba-fgv-clusterizacao-imobiliaria/blob/main/projetofinal.ipynb)
 
 Projeto final da disciplina **Aprendizado Não Supervisionado** (Prof. Sergio Polimante) do Executive MBA em Business Analytics e Big Data da **FGV**.
 

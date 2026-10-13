@@ -1,125 +1,131 @@
-# Projeto Final — Aprendizado Não Supervisionado
+# Segmentação do Mercado Imobiliário da Califórnia
 
-Segmentação do mercado imobiliário da Califórnia com técnicas de clusterização
-(dataset California Housing). O notebook de entrega é **`projetofinal.ipynb`**. Ele cobre:
+### Seis tipos de bairro, uma estratégia para cada um
 
-- exploração dos dados, pré-processamento e engenharia de features;
-- PCA e quatro algoritmos de clusterização (K-Means, DBSCAN, Ward e GMM);
-- validação, caracterização dos segmentos e estratégias de negócio.
+[![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SEU-USUARIO/mba-fgv-clusterizacao-imobiliaria/blob/main/projetofinal.ipynb)
 
-| Arquivo | Conteúdo |
-|---|---|
-| `projetofinal.ipynb` | notebook de entrega, executado e com as saídas salvas |
-| `Projeto Final - Aprendizado Não Supervisionado.ipynb` | template original da disciplina |
-| `docs/` | enunciado do projeto |
-| `archive/` | versão anterior do notebook (apenas preparação de dados) |
-| `data/` | arquivos externos baixados pelo notebook e segmentação exportada (fora do controle de versão) |
+Projeto final da disciplina **Aprendizado Não Supervisionado** (Prof. Sergio Polimante) do Executive MBA em Business Analytics e Big Data da **FGV**.
 
-## Ambiente
+Aplicamos técnicas de clusterização a 20.640 vizinhanças do Censo dos EUA para substituir a segmentação tradicional, por cidade e faixa de preço, por **segmentos baseados no comportamento real dos bairros**. Cada segmento termina numa estratégia de negócio.
 
-- Python 3.14, selecionado pelo arquivo `.python-version`.
-- [uv](https://docs.astral.sh/uv/) para instalar e gerenciar as dependências.
-- Bibliotecas de análise: pandas, NumPy, Matplotlib, Seaborn, scikit-learn, GeoPandas e openpyxl.
-- Ferramentas de desenvolvimento: IPython kernel (`ipykernel`) e JupyterLab.
+![Painel dos seis segmentos](assets/painel_segmentos.png)
 
-As dependências estão declaradas em `pyproject.toml`, e as versões resolvidas
-estão registradas em `uv.lock`. Mantenha ambos no controle de versão.
+## O problema
 
-## Preparação
+Uma imobiliária da Califórnia segmenta o mercado por **cidade** e por **faixa de preço**. Essa divisão esconde diferenças importantes: dois bairros com o mesmo preço podem ter clientes completamente diferentes.
 
-Mantenha o projeto numa pasta de caminho curto (nesta máquina,
-`C:\Users\admin\projects\projetofinal`) e abra o terminal nela:
+A pergunta: **existe uma divisão melhor, que oriente marketing, equipes de vendas, investimento e precificação?**
 
-```powershell
-Set-Location "$env:USERPROFILE\projects\projetofinal"
+## A abordagem
+
+```mermaid
+flowchart LR
+    A["Censo dos EUA<br/>20.640 vizinhanças"] --> B["Limpeza<br/>outliers por tipo,<br/>log e winsorização"]
+    B --> C["Engenharia de features<br/>distância do mar, densidade,<br/>renda per capita..."]
+    C --> D["Seleção<br/>7 variáveis<br/>sem redundância"]
+    D --> E["4 algoritmos<br/>K-Means, DBSCAN,<br/>Ward e GMM"]
+    E --> F["Validação<br/>métricas, bootstrap,<br/>mapa e PCA"]
+    F --> G["6 segmentos<br/>perfis e estratégias"]
 ```
 
-Caminhos muito longos, como os de pastas sincronizadas pelo OneDrive, passam do limite
-de 260 caracteres do Windows quando o suporte a caminhos longos está desativado. Isso
-causa erros de arquivo não encontrado ao importar Matplotlib e Jupyter.
-Veja a [documentação da Microsoft sobre limites de caminhos](https://learn.microsoft.com/windows/win32/fileio/maximum-file-path-limitation).
+- **Dados enriquecidos:** litoral (Natural Earth), condados (US Census Bureau) e cidades, para criar variáveis de localização sem usar latitude e longitude diretamente.
+- **Escolha do número de segmentos:** cotovelo, silhouette, Davies-Bouldin e estabilidade por bootstrap. O k = 6 é o maior número de segmentos que continua estável.
+- **Validação em quatro frentes:** métricas internas comparadas com rótulos aleatórios, separação e coesão, estabilidade (ARI de 0,94 em 30 reamostragens) e coerência no mapa.
+- **Técnicas avançadas:** níveis de granularidade (macro-segmentos), clusterização recursiva (subsegmentos) e ensemble de K-Means, GMM e Ward.
 
-Depois, sincronize o ambiente:
+## Resultados
+
+| Segmento | Domicílios | Casa mediana | Quem é | Papel na estratégia |
+|---|---|---|---|---|
+| **S1 · Interior acessível** | 18% | US$ 91 mil | famílias de renda baixa a média no Vale Central | volume e financiamento |
+| **S2 · Famílias urbanas populares** | 14% | US$ 145 mil | famílias grandes nos bairros mais densos de Los Angeles | locação e acesso à moradia |
+| **S3 · Urbano compacto costeiro** | 17% | US$ 206 mil | solteiros e casais em apartamentos perto do mar | investidores e captação |
+| **S4 · Subúrbios familiares em expansão** | 24% | US$ 215 mil | famílias de renda média-alta em casas novas | **prioridade nº 1:** lançamentos |
+| **S5 · Classe média urbana consolidada** | 17% | US$ 216 mil | classe média nos bairros antigos das metrópoles | revenda e reforma |
+| **S6 · Alto padrão costeiro** | 10% | US$ 444 mil ou mais | a maior renda do estado, a 5,5 km do mar | margem e relacionamento |
+
+**Principais achados:**
+
+1. **Preço não define o cliente:** S3, S4 e S5 custam o mesmo e são mercados opostos.
+2. **O mar vale por si só:** a casa mediana custa US$ 256 mil até 5 km da costa e US$ 87 mil a mais de 80 km.
+3. **O crescimento está nos subúrbios:** S4 tem 23% dos bairros com casas novas e o maior número de domicílios.
+4. **O alto padrão é pequeno em clientes e grande em valor:** S6 tem 10% dos domicílios e 21% do valor do estoque.
+
+<p>
+  <img src="assets/mapa_segmentos.png" width="49%" alt="Segmentos no mapa da Califórnia">
+  <img src="assets/matriz_prioridade.png" width="49%" alt="Matriz de priorização dos segmentos">
+</p>
+
+## Equipe
+
+- Jorge Adriano Fontes de Almeida Filho
+- Rafael Collet
+- Stephanie Santin Padovesi
+- Thaís Pereira de Vasconcelos Moreira
+- Yan Samuray Siepamann Vieira
+
+## Stack
+
+Python · pandas · scikit-learn · GeoPandas · Matplotlib · Seaborn · SciPy · uv
+
+## Estrutura
+
+| Caminho | Conteúdo |
+|---|---|
+| `projetofinal.ipynb` | notebook de entrega, executado e com as saídas salvas |
+| `tools/notebook/` | gerador do notebook: código e textos de cada seção, execução e checklist |
+| `assets/` | figuras usadas neste README |
+| `archive/` | versão anterior (apenas a preparação dos dados) |
+| `docs/` | enunciado do projeto |
+| `data/` | arquivos externos baixados pelo notebook e a segmentação exportada (fora do controle de versão) |
+
+## Como reproduzir
+
+### No Google Colab
+
+Abra o notebook pelo badge acima ou envie `projetofinal.ipynb` ao Google Drive e use **Runtime → Run all** (Ambiente de execução → Executar tudo). O Colab já traz todas as bibliotecas usadas. A execução completa leva cerca de 5 minutos e precisa de internet para baixar os dados.
+
+### Localmente
+
+Pré-requisito: [uv](https://docs.astral.sh/uv/). O Python 3.14 é selecionado pelo `.python-version`.
 
 ```powershell
 uv sync --locked
-```
-
-O comando cria ou sincroniza a `.venv`, incluindo as ferramentas de desenvolvimento.
-O `uv` utiliza a versão de Python indicada em `.python-version` e pode baixá-la
-caso ela ainda não esteja instalada. A primeira instalação requer internet.
-
-Não é necessário ativar a `.venv` para usar os comandos `uv run` abaixo.
-
-## Executar no VS Code
-
-1. No terminal posicionado na pasta do projeto, abra o VS Code com `code .`.
-2. Tenha as extensões **Python** (`ms-python.python`) e **Jupyter** (`ms-toolsai.jupyter`) instaladas.
-3. Abra `projetofinal.ipynb`.
-4. No canto superior direito, clique em **Select Kernel / Selecionar Kernel**,
-   escolha **Python Environments / Ambientes Python** e selecione
-   `.venv\Scripts\python.exe` deste projeto.
-5. Execute as células em ordem ou use **Run All / Executar Tudo**.
-
-Se o VS Code já tiver outro interpretador selecionado, use
-**Python: Select Interpreter** na paleta de comandos e selecione a `.venv`.
-A seleção do kernel do notebook também deve apontar para esse ambiente.
-
-## Executar no navegador
-
-```powershell
 uv run --locked python -m jupyterlab
 ```
 
-Abra o notebook na interface do JupyterLab e utilize o kernel **Python 3 (ipykernel)**.
-Execute o comando a partir da pasta do projeto. A chamada `python -m jupyterlab` usa
-diretamente o interpretador escolhido pelo `uv` nesse caminho.
-Para encerrar o servidor, pressione `Ctrl+C` no terminal e confirme quando solicitado.
+No VS Code, abra `projetofinal.ipynb` e selecione o kernel `.venv\Scripts\python.exe` do projeto.
 
-## Executar no Google Colab
+> **Windows:** mantenha o projeto numa pasta de caminho curto. Caminhos longos, como os de pastas sincronizadas pelo OneDrive, passam do limite de 260 caracteres e quebram a importação do Matplotlib. Veja a [documentação da Microsoft](https://learn.microsoft.com/windows/win32/fileio/maximum-file-path-limitation).
 
-1. Envie `projetofinal.ipynb` ao Google Drive e abra-o com o Colab.
-2. Use **Runtime → Run all** (Ambiente de execução → Executar tudo). O Colab já traz as
-   bibliotecas usadas, incluindo o GeoPandas. A execução completa leva alguns minutos.
-3. Para a entrega, compartilhe o link com a opção "qualquer pessoa com o link".
+### Gerar o notebook a partir do código-fonte
 
-## Dados
+O notebook é montado a partir de `tools/notebook/`:
 
-- **California Housing:** obtido com `sklearn.datasets.fetch_california_housing(as_frame=True)`.
-  Se esse download falhar, o notebook reconstrói a mesma tabela a partir de uma cópia pública.
-  Depois do primeiro download, o scikit-learn reutiliza o cache em `scikit_learn_data`, na pasta
-  do usuário.
-- **Arquivos externos**, baixados uma única vez para `data/`:
+- `cells_*.py`: código e textos de cada seção;
+- `subs.py`: escolhas de modelagem;
+- `interp_*.py`: interpretações.
+
+Para gerar, executar, embutir a imagem do resumo executivo e conferir:
+
+```powershell
+uv run python tools/notebook/make_nb.py
+uv run python tools/notebook/export_assets.py
+```
+
+O checklist (`check_nb.py`) confere:
+
+- zero erros e zero avisos;
+- todas as seções do enunciado;
+- nenhum código comentado;
+- todos os integrantes na primeira célula.
+
+### Dados
+
+- **California Housing:** `sklearn.datasets.fetch_california_housing`, com uma cópia pública como alternativa.
+- **Externos,** baixados uma vez para `data/`:
   - limites dos condados (US Census Bureau, via Plotly);
-  - litoral do Natural Earth na escala 1:10 milhões;
-  - as maiores cidades dos EUA (Plotly);
-  - a versão do Kaggle do dataset, usada apenas para validar a distância até a costa.
-- **Saída:** `data/segmentos_california.csv`, com o segmento de cada block group.
-
-A primeira execução precisa de internet.
-
-## Verificar e manter o ambiente
-
-```powershell
-uv run --locked python --version
-uv pip check
-uv run --locked python -c "import pandas, numpy, matplotlib, seaborn, sklearn, geopandas, openpyxl, ipykernel, jupyterlab; print('Ambiente OK')"
-```
-
-Para adicionar uma biblioteca de análise:
-
-```powershell
-uv add nome-do-pacote
-```
-
-Para adicionar uma ferramenta de desenvolvimento:
-
-```powershell
-uv add --dev nome-do-pacote
-```
-
-Use esses comandos para manter `pyproject.toml`, `uv.lock` e `.venv` sincronizados.
-Se o notebook ainda exibir a mensagem de que falta `ipykernel`, execute
-`uv sync --locked`, selecione novamente o kernel da `.venv` e reinicie-o.
-
-Referência: [integração oficial do uv com Jupyter e VS Code](https://docs.astral.sh/uv/guides/integration/jupyter/).
+  - litoral do Natural Earth (1:10 milhões);
+  - maiores cidades dos EUA (Plotly);
+  - versão do Kaggle do dataset, usada só para validar a distância até a costa.
+- **Saída:** `data/segmentos_california.csv`, com o segmento de cada bairro.

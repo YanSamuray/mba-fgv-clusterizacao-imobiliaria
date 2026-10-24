@@ -20,11 +20,13 @@ INTERP["[[PRIORITY-TEXT]]"] = r'''
 **Ranking de atratividade:**
 
 1. **S4 · Subúrbios familiares em expansão (0,85):** lidera três dos quatro critérios. É o maior mercado em clientes e em valor, e o que mais cresce (23% de casas novas). É a **prioridade número 1 de investimento**.
-2. **S3 · Urbano compacto costeiro (0,62):** a maior oportunidade de preço (16% subvalorizados), com valor de estoque relevante. É a **prioridade para investidores e captação**.
+2. **S3 · Urbano compacto costeiro (0,62):** a maior proporção de subvalorizados (16%), com valor de estoque relevante. Como S3 também tem a maior proporção de sobrevalorizados, a oportunidade está em escolher bem cada imóvel: é a **prioridade para investidores e captação seletiva**.
 3. **S1 · Interior acessível (0,41):** grande em clientes, com boa oportunidade de preço (cerca de 12%), mas o menor valor de estoque. É um **mercado de volume**.
 4. **S5 · Classe média urbana consolidada (0,35):** valor alto, mas sem crescimento (0% de casas novas). É um mercado de **revenda**.
 5. **S6 · Alto padrão costeiro (0,22):** pequeno em clientes e sem subvalorização visível, mas com **o segundo maior valor de estoque**. A prioridade é **margem**, e não expansão.
 6. **S2 · Famílias urbanas populares (0,19):** baixo crescimento e baixo valor. É um mercado de **acesso à moradia**, que pede um modelo de negócio próprio (aluguel e financiamento).
+
+**O ranking é robusto:** sem o critério de oportunidade de preço, o mais incerto, S4 e S3 continuam nos dois primeiros lugares (linha impressa abaixo da tabela). Só muda a ordem do meio: S5 passa à frente de S1.
 
 No gráfico, o quadrante superior direito (crescimento e oportunidade acima da mediana) reúne **S3, S1 e S4**. S4 está no limite da oportunidade de preço, mas isolado à direita: é a maior fronteira de crescimento. **S2, S5 e S6** ficam no quadrante inferior esquerdo, onde a estratégia é de manutenção e margem, e não de expansão.
 '''
@@ -42,7 +44,7 @@ INTERP["[[ALLOCATION-TEXT]]"] = r'''
 | S6 · Alto padrão costeiro | US\$ 0,7 milhão (7%) | 8 | Santa Monica, San Rafael, Redondo Beach, Culver City |
 
 - **S4 recebe 32% do orçamento com 24% dos domicílios:** é o segmento mais atrativo e recebe um reforço proporcional.
-- **S6 recebe 7% com 10% dos domicílios**, porque o marketing de alto padrão é de **relacionamento** (indicações, eventos, corretores especializados) e custa menos por cliente que o marketing de massa. A receita, porém, é alta: cada um dos 8 corretores de S6 trabalha com imóveis de cerca de US\$ 450 mil ou mais.
+- **S6 recebe 7% com 10% dos domicílios**, porque o marketing de alto padrão é de **relacionamento** (indicações, eventos, corretores especializados) e custa menos por cliente que o marketing de massa. A receita, porém, é alta: cada um dos 8 corretores de S6 trabalha com imóveis de cerca de US\$ 450 mil ou mais. Os corretores seguem a mesma regra do orçamento; como S6 tem 21% do valor do estoque e a comissão acompanha o preço, a diretoria pode reforçar essa equipe se quiser privilegiar a receita por transação.
 - **A regra é transparente e ajustável.** Se a diretoria quiser privilegiar a margem em vez do crescimento, basta mudar os pesos do índice, e o código recalcula toda a alocação.
 '''
 
@@ -61,7 +63,7 @@ Cada estratégia parte do perfil do segmento (seção 8) e termina num **KPI men
 **Investimento:**
 
 - **S4 (crescimento):** comprar terrenos e fazer parcerias com incorporadoras nas cidades com mais lançamentos.
-- **S3 (subvalorização):** captar os cerca de 1.700 block groups subvalorizados do arquivo exportado. Os cerca de 280 mil domicílios de S3 em áreas subvalorizadas são o primeiro alvo.
+- **S3 (subvalorização):** usar a coluna `subvalorizado` do arquivo exportado como ponto de partida da captação, com avaliação individual de cada imóvel antes da compra, porque em S3 os desvios de preço vão para os dois lados. Os cerca de 280 mil domicílios de S3 em áreas subvalorizadas são o primeiro alvo.
 - **S6 (proteção de valor):** manter presença qualificada, sem expansão agressiva.
 '''
 
@@ -71,8 +73,8 @@ INTERP["[[CONCLUSION-TEXT]]"] = r'''
 A segmentação final tem **6 segmentos obtidos com o K-Means** sobre 7 features padronizadas, e a qualidade foi avaliada por quatro lentes:
 
 - **Métricas internas:** silhouette de 0,185, contra −0,01 com rótulos aleatórios; inércia 52% menor que a do acaso; Davies-Bouldin de 1,53.
-- **Estabilidade:** ARI de 0,94 em 30 reamostragens bootstrap, e Jaccard acima de 0,93 em todos os segmentos.
-- **Concordância entre métodos:** o Ward encontra praticamente os mesmos segmentos (ARI de 0,75), e a maioria dos algoritmos confirma o segmento de 93,5% dos block groups.
+- **Estabilidade:** ARI de 0,94 em 30 reamostragens bootstrap, e Jaccard acima de 0,93 em todos os segmentos. Num mercado simulado sem grupos, com as mesmas correlações, o mesmo procedimento dá só 0,71: os segmentos não são cortes arbitrários de um contínuo.
+- **Concordância entre métodos:** o Ward, que otimiza o mesmo critério por outro caminho, chega a segmentos muito parecidos (ARI de 0,75), e a maioria dos algoritmos confirma o segmento de 93,5% dos block groups.
 - **Coerência geográfica:** sem usar latitude e longitude, os segmentos formam padrões claros no mapa e aparecem em várias metrópoles.
 
 A silhouette moderada **não é um defeito da segmentação**, mas uma característica do mercado, e a teoria explica por quê:
@@ -93,10 +95,10 @@ Os 6,5% de bairros contestados ficam identificados para tratamento à parte.
 ### 2. Principais insights de negócio
 
 1. **Preço não define o cliente.** S3, S4 e S5 têm o mesmo preço mediano (cerca de US\$ 210 mil), mas são mercados opostos: apartamentos compactos perto do mar, casas novas de famílias no subúrbio e casas antigas da classe média. A segmentação atual por faixa de preço mistura esses três clientes.
-2. **A proximidade do mar vale por si só.** O preço cai de US\$ 256 mil (até 5 km) para US\$ 87 mil (mais de 80 km), enquanto a renda dos moradores quase não muda.
+2. **A proximidade do mar vale por si só.** Com a mesma renda mediana (US\$ 37 mil e US\$ 36 mil), a casa custa US\$ 256 mil até 5 km da costa e US\$ 163 mil entre 25 e 80 km, 36% a menos. No interior (mais de 80 km), ela cai para US\$ 87 mil, mas ali a renda também é menor (US\$ 26 mil).
 3. **O crescimento está nos subúrbios.** S4 tem 23% de casas novas e é o maior mercado do estado em domicílios (24%) e em valor (25%).
 4. **O alto padrão é pequeno em clientes e enorme em valor.** S6 tem 10% dos domicílios e 21% do valor do estoque.
-5. **Há oportunidades de preço concentradas.** 16% dos block groups de S3 e 12% dos de S1 valem 20% ou mais abaixo do que os seus fundamentos indicam.
+5. **Há oportunidades de preço, que pedem avaliação caso a caso.** 16% dos block groups de S3 e 12% dos de S1 valem 20% ou mais abaixo do que os seus fundamentos indicam. Em S3, quase a mesma fatia (14%) está acima: é o segmento em que o preço mais se afasta dos fundamentos, para os dois lados.
 6. **Os segmentos são tipos de bairro, e não cidades.** Toda metrópole tem uma mistura de segmentos, então a estratégia deve ser por segmento, aplicada em várias cidades.
 
 ### 3. Limitações
@@ -106,7 +108,9 @@ Os 6,5% de bairros contestados ficam identificados para tratamento à parte.
 - **Valores no teto:** 38% de S6 está no teto de US\$ 500 mil. O preço real e a subvalorização desse segmento são desconhecidos.
 - **Sem série histórica:** o "crescimento" é aproximado pela idade das casas, e não por uma variação de preços ou de população.
 - **Escolhas de modelagem:** a seleção das features, o número de segmentos e o índice de atratividade envolvem julgamento de negócio, documentado em cada etapa. Outras escolhas razoáveis levariam a segmentos parecidos, mas não idênticos.
-- **Modelo de valor esperado:** é correlacional (R² de 0,87). "Subvalorizado" significa "barato para os fundamentos medidos", e pode haver fatores não medidos (como escolas e segurança).
+- **Modelo de valor esperado:** é correlacional (R² de 0,87). "Subvalorizado" significa "barato para os fundamentos medidos", e pode haver fatores não medidos (como escolas e segurança). Os desvios aparecem nos dois sentidos em proporções parecidas (perto de 8,5% abaixo e de 9% acima do esperado), então parte deles é erro do modelo.
+- **Valor do estoque:** multiplica todos os domicílios pelo valor mediano das casas, que o Censo mede só nos imóveis dos próprios donos. Nos segmentos com mais aluguel, o estoque fica superestimado.
+- **Densidade perto da costa:** o raio de 3 km inclui mar nos bairros litorâneos, então a densidade deles (sobretudo S3 e S6) fica subestimada.
 
 ### 4. Próximos passos
 
@@ -132,7 +136,7 @@ As três metas da introdução foram avaliadas assim:
 |---|---|
 | **Conversão de 12% para 25 a 30%** | Não pode ser medida com dados do Censo: depende de dados de vendas. A segmentação entrega o que essa meta exige: mensagem, canal e produto específicos para seis públicos que hoje recebem a mesma abordagem (por exemplo, S3, S4 e S5, que têm o mesmo preço e perfis opostos). **Validação recomendada:** um piloto com campanhas A/B por segmento, medindo a conversão antes e depois |
 | **Tempo de venda 40% menor** | Também depende de dados internos. Os resultados atacam duas causas de demora: imóveis com preço acima dos fundamentos (o modelo de valor esperado identifica os sobrevalorizados) e corretores no lugar errado (a alocação por segmento e cidade) |
-| **US\$ 50 a 100 milhões em nichos subexplorados** | **Atendida em ordem de grandeza.** A análise encontrou cerca de 1.700 block groups subvalorizados, com perto de 800 mil domicílios, concentrados em S3 e S1. Captar só 500 imóveis ao preço mediano de S3 (cerca de US\$ 200 mil, em valores de 1990) já representaria cerca de US\$ 100 milhões |
+| **US\$ 50 a 100 milhões em nichos subexplorados** | **Há base para a meta, mas ela depende de validação.** A análise encontrou cerca de 1.700 block groups subvalorizados, com perto de 800 mil domicílios, sobretudo em S3 e S1. Como ordem de grandeza, 500 imóveis ao preço mediano de S3 (cerca de US\$ 200 mil, em valores de 1990) somam US\$ 100 milhões em negócios. Confirmar que esses imóveis estão de fato abaixo do valor exige avaliação individual e preços de transação atuais |
 
 **Conclusão sobre as expectativas:** o modelo cumpre o que um modelo não supervisionado pode cumprir. Ele encontrou segmentos estáveis, interpretáveis e com tamanho e oportunidade quantificados. As metas de conversão e de tempo de venda passam a ter um plano de teste concreto, com os KPIs da seção 9.5.
 
@@ -140,7 +144,7 @@ As três metas da introdução foram avaliadas assim:
 
 1. **Substituir a segmentação por cidade e faixa de preço pelos 6 segmentos**, mantendo os 3 macro-segmentos para a comunicação institucional.
 2. **Priorizar S4 · Subúrbios familiares em expansão:** cerca de um terço do orçamento e das equipes, com foco em lançamentos e na troca de imóvel.
-3. **Criar uma frente de investimento em S3**, usando o modelo de valor esperado para captar imóveis subvalorizados e oferecer gestão de aluguel.
+3. **Criar uma frente de investimento seletiva em S3**, usando a lista de subvalorizados como ponto de partida, com avaliação individual de cada imóvel, e oferecer gestão de aluguel.
 4. **Tratar S6 como uma operação de luxo**: equipe pequena e especializada, foco em margem e relacionamento.
 5. **Adaptar o modelo de negócio a S1 e S2:** volume e acessibilidade (financiamento, locação e programas de habitação).
 6. **Medir e revisar:** acompanhar os KPIs de cada segmento e reexecutar a segmentação a cada nova base de dados.

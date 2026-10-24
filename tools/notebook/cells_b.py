@@ -872,6 +872,51 @@ exec_table(stability.reset_index(names="segmento").assign(segmento=lambda d: "S"
 md(r'''
 [[INTERP-STABILITY]]
 
+### Teste de controle: e se o mercado não tivesse grupos?
+
+Rótulos sorteados ao acaso (seção 7.1) são uma referência fácil de vencer. Uma referência mais exigente é um **mercado simulado sem nenhum grupo**: uma única nuvem gaussiana, com a mesma média e as mesmas correlações das 7 features. Aplicamos a ela exatamente o mesmo K-Means e as mesmas 30 reamostragens. Se os nossos segmentos fossem só cortes arbitrários de um contínuo, os números seriam parecidos.
+''')
+
+code(r'''
+# Mercado simulado sem grupos: uma única nuvem gaussiana com a média e a covariância das 7 features
+gaussian_null = np.random.default_rng(RANDOM_STATE).multivariate_normal(Z.mean().to_numpy(), np.cov(Z.T), size=len(Z))
+null_model = KMeans(n_clusters=K_FINAL, n_init=10, random_state=RANDOM_STATE).fit(gaussian_null)
+
+# Mesma estabilidade por bootstrap da célula anterior, aplicada à simulação
+rng = np.random.default_rng(RANDOM_STATE)
+null_aris = []
+for b in range(N_BOOT_FINAL):
+    idx = np.unique(rng.choice(len(gaussian_null), size=len(gaussian_null), replace=True))
+    boot = KMeans(n_clusters=K_FINAL, n_init=4, random_state=100 + b).fit(gaussian_null[idx])
+    null_aris.append(adjusted_rand_score(null_model.labels_, boot.predict(gaussian_null)))
+
+
+def explained_variance_pct(X, inertia):
+    """Parte da variação total explicada pelos grupos: 1 - inércia / soma dos quadrados em torno da média."""
+    X = np.asarray(X)
+    return 100 * (1 - inertia / ((X - X.mean(axis=0)) ** 2).sum())
+
+
+null_test = pd.DataFrame({
+    "Segmentação real": [final_metrics.iloc[0], explained_variance_pct(Z, km_final.inertia_),
+                         np.mean(boot_aris), np.min(boot_aris)],
+    "Mercado simulado sem grupos": [silhouette_score(gaussian_null, null_model.labels_),
+                                    explained_variance_pct(gaussian_null, null_model.inertia_),
+                                    np.mean(null_aris), np.min(null_aris)],
+}, index=["Silhouette", "Variação explicada pelos grupos", "Estabilidade (ARI médio)", "Pior reamostragem (ARI)"])
+exec_table(null_test, index=True, formats={"Silhouette": "dec3", "Variação explicada pelos grupos": "pct",
+                                           "Estabilidade (ARI médio)": "dec2", "Pior reamostragem (ARI)": "dec2"},
+           caption=f"O mesmo K-Means (k = {K_FINAL}) nos dados reais e num mercado sem grupos")
+''')
+
+md(r'''
+**Os segmentos passam no teste:**
+
+- **Estabilidade:** no mercado simulado, o K-Means também "encontra" 6 grupos, mas eles mudam a cada amostra (ARI de 0,71, com reamostragens que caem para 0,45). Nos dados reais, os segmentos se repetem (0,94; pior caso de 0,89).
+- **Silhouette e variação explicada:** 0,185 e 52% nos dados reais, contra 0,137 e 46% no mercado sem grupos.
+
+**Conclusão:** o mercado é contínuo (não há vazios entre os segmentos), mas não é uma nuvem sem forma: a sua estrutura mantém as fronteiras dos segmentos no mesmo lugar, amostra após amostra. É isso que torna os segmentos confiáveis para orientar uma estratégia, apesar da silhouette moderada.
+
 ## 7.4 Distribuição geográfica dos clusters
 ''')
 

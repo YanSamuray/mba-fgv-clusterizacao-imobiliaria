@@ -453,6 +453,7 @@ seg["valor_esperado_usd"] = np.exp(predicted_log) * 100_000
 seg["preco_vs_esperado"] = seg["MedHouseVal"] * 100_000 / seg["valor_esperado_usd"]
 seg["subvalorizado"] = (seg["preco_vs_esperado"] <= 0.8) & ~seg["no_teto"]
 seg["sobrevalorizado"] = (seg["preco_vs_esperado"] >= 1.25) & ~seg["no_teto"]
+print(f"Block groups subvalorizados: {seg['subvalorizado'].mean():.1%} | sobrevalorizados: {seg['sobrevalorizado'].mean():.1%}")
 
 # Indicadores de crescimento, oportunidade e risco de preço por segmento
 opportunity = pd.DataFrame({
@@ -511,7 +512,7 @@ Combinamos quatro critérios, cada um normalizado de 0 a 1 entre os segmentos:
 | **Tamanho em clientes** | número de domicílios | alcance de marketing e volume de transações |
 | **Tamanho em valor** | valor estimado do estoque (US\$) | a comissão é proporcional ao preço: receita potencial |
 
-O **índice de atratividade** é a média simples dos quatro, sem pesos escolhidos a dedo.
+O **índice de atratividade** é a média simples dos quatro, sem pesos escolhidos a dedo. Como dois critérios medem tamanho (clientes e valor), o tamanho do segmento responde por metade do índice. Logo abaixo da tabela, testamos se o ranking muda sem o critério mais incerto, a oportunidade de preço.
 ''')
 
 code(r'''
@@ -535,6 +536,11 @@ display(exec_table(priority.reset_index(),
                            "oportunidade_de_preco": "Oportunidade de preço", "tamanho_em_clientes": "Tamanho em clientes",
                            "tamanho_em_valor": "Tamanho em valor", "indice_atratividade": "Índice de atratividade"},
                    highlight="indice_atratividade"))
+
+# Sensibilidade: o ranking sem a oportunidade de preço, o critério mais incerto (seção 9.2)
+without_price = priority[["crescimento", "tamanho_em_clientes", "tamanho_em_valor"]].mean(axis=1).sort_values(ascending=False)
+print("Ranking sem a oportunidade de preço:",
+      " > ".join(f"{name.split(' · ')[0]} ({br(value, 2)})" for name, value in without_price.items()))
 
 # Matriz de priorização: crescimento x oportunidade, bolha proporcional aos domicílios
 fig, ax = plt.subplots(figsize=(10, 6.5))

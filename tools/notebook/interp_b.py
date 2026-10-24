@@ -45,8 +45,8 @@ INTERP["[[INTERP-GMM]]"] = r'''
 INTERP["[[INTERP-COMPARISON]]"] = r'''
 **Escolhemos o K-Means**, que vence ou empata em todos os critérios técnicos e de negócio:
 
-- **Qualidade:** tem a melhor silhouette (0,184), o melhor Davies-Bouldin (1,53) e o melhor Calinski-Harabasz (4.479).
-- **Ward chega muito perto** (0,182 de silhouette) e concorda bastante com o K-Means (**ARI de 0,75**): dois métodos diferentes encontram essencialmente os mesmos segmentos, o que reforça a confiança no resultado.
+- **Qualidade:** tem a melhor silhouette (0,184), o melhor Davies-Bouldin (1,53) e o melhor Calinski-Harabasz (4.479). As três métricas premiam grupos compactos em torno de um centro, que é exatamente o que o K-Means otimiza; por isso, a vantagem nelas pesa junto com a estabilidade e a utilidade para o negócio.
+- **Ward chega muito perto** (0,182 de silhouette) e concorda bastante com o K-Means (**ARI de 0,75**). Era esperado: o Ward minimiza a mesma medida (a variância dentro dos grupos) por outro caminho, e os bairros fora da amostra foram atribuídos ao centro mais próximo. A concordância mostra que o resultado não depende do método de otimização, mas não é uma confirmação independente.
 - **GMM fica bem atrás** (silhouette 0,09, ARI de 0,33): as elipses flexíveis se sobrepõem num mercado contínuo, e os grupos ficam menos nítidos.
 - **DBSCAN não segmenta** (um único grupo); por isso as métricas aparecem vazias (NaN). Com eps menor, a silhouette de 0,15 é enganosa, porque vem de um grupo com 89% dos dados e outro com 0,2%.
 - **Negócio:** o K-Means dá um **centróide** (perfil médio) por segmento, fácil de virar persona. Também classifica novos bairros instantaneamente (seção 9.7) e é estável (seção 7.3).
@@ -57,7 +57,7 @@ INTERP["[[INTERP-COMPARISON]]"] = r'''
 INTERP["[[INTERP-METRICS]]"] = r'''
 **Como ler as métricas:**
 
-- **Silhouette de 0,185:** costuma ser classificada como "estrutura fraca". Mas, como vimos, o mercado é um contínuo sem fronteiras naturais, e nesse cenário nenhuma segmentação teria silhouette alta. O que importa é que ela é **muito melhor que o acaso**: com rótulos sorteados, a silhouette é −0,01.
+- **Silhouette de 0,185:** costuma ser classificada como "estrutura fraca". Mas, como vimos, o mercado é um contínuo sem fronteiras naturais, e nesse cenário nenhuma segmentação teria silhouette alta. Com rótulos sorteados ao acaso, a silhouette é −0,01, mas essa referência é fácil de vencer. Na seção 7.3, comparamos os segmentos com uma referência mais exigente: um mercado simulado sem grupos.
 - **Inércia 52% menor que a de rótulos aleatórios:** os segmentos explicam metade da variação do mercado.
 - **Davies-Bouldin de 1,53 vs. 122** e **Calinski-Harabasz de 4.479 vs. 1:** os segmentos são muito mais compactos e separados do que uma divisão arbitrária.
 

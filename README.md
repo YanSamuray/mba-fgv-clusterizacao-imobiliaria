@@ -30,7 +30,7 @@ flowchart LR
 
 - **Dados enriquecidos:** litoral (Natural Earth), condados (US Census Bureau) e cidades, para criar variáveis de localização sem usar latitude e longitude diretamente.
 - **Escolha do número de segmentos:** cotovelo, silhouette, Davies-Bouldin e estabilidade por bootstrap. O k = 6 é o maior número de segmentos que continua estável.
-- **Validação em quatro frentes:** métricas internas comparadas com rótulos aleatórios, separação e coesão, estabilidade (ARI de 0,94 em 30 reamostragens) e coerência no mapa.
+- **Validação em quatro frentes:** métricas internas, separação e coesão, estabilidade (ARI de 0,94 em 30 reamostragens, contra 0,71 num mercado simulado sem grupos) e coerência no mapa.
 - **Técnicas avançadas:** níveis de granularidade (macro-segmentos), clusterização recursiva (subsegmentos) e ensemble de K-Means, GMM e Ward.
 
 ## Resultados
@@ -47,7 +47,7 @@ flowchart LR
 **Principais achados:**
 
 1. **Preço não define o cliente:** S3, S4 e S5 custam o mesmo e são mercados opostos.
-2. **O mar vale por si só:** a casa mediana custa US$ 256 mil até 5 km da costa e US$ 87 mil a mais de 80 km.
+2. **O mar vale por si só:** com a mesma renda, a casa mediana custa US$ 256 mil até 5 km da costa e US$ 163 mil entre 25 e 80 km.
 3. **O crescimento está nos subúrbios:** S4 tem 23% dos bairros com casas novas e o maior número de domicílios.
 4. **O alto padrão é pequeno em clientes e grande em valor:** S6 tem 10% dos domicílios e 21% do valor do estoque.
 

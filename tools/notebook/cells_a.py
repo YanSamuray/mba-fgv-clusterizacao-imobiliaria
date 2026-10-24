@@ -41,10 +41,10 @@ md(r'''
 ### Cinco achados
 
 1. **Preço não define o cliente.** Três segmentos têm o mesmo preço mediano (cerca de US\$ 210 mil): apartamentos compactos perto do mar, casas novas de famílias no subúrbio e casas antigas da classe média. A segmentação por faixa de preço mistura os três.
-2. **O mar vale por si só.** A casa mediana custa US\$ 256 mil até 5 km da costa e US\$ 87 mil a mais de 80 km, embora a renda dos moradores quase não mude.
+2. **O mar vale por si só.** Com a mesma renda mediana (US\$ 37 mil e US\$ 36 mil), a casa custa US\$ 256 mil até 5 km da costa e US\$ 163 mil entre 25 e 80 km: 36% a menos.
 3. **O crescimento está nos subúrbios.** O segmento S4 tem 23% dos bairros com casas de até 10 anos e é o maior mercado do estado, com 24% dos domicílios.
 4. **O alto padrão é pequeno em clientes e grande em valor.** O segmento S6 tem 10% dos domicílios e 21% do valor do estoque de imóveis.
-5. **Há oportunidades mapeadas.** Cerca de 1.700 bairros estão pelo menos 20% abaixo do preço que os seus fundamentos indicam, concentrados nos segmentos S3 e S1.
+5. **Há oportunidades a investigar.** Cerca de 1.700 bairros estão pelo menos 20% abaixo do preço que os seus fundamentos indicam, sobretudo em S3 e S1. Em S3, os desvios vão para os dois lados: é onde a avaliação de cada imóvel mais faz diferença.
 
 ### Os seis segmentos
 
@@ -61,7 +61,7 @@ md(r'''
 
 1. **Substituir a segmentação por cidade e preço pelos seis segmentos**, aplicando a mesma estratégia por segmento em todas as cidades.
 2. **Concentrar cerca de um terço do orçamento e das equipes em S4**, com foco em lançamentos e na troca de imóvel.
-3. **Abrir uma frente de investimento em S3**, usando o modelo de valor esperado para captar imóveis subvalorizados, e **tratar S6 como uma operação de luxo** dedicada.
+3. **Abrir uma frente de investimento seletiva em S3**, usando o modelo de valor esperado para encontrar imóveis subvalorizados e avaliando cada um antes da compra, e **tratar S6 como uma operação de luxo** dedicada.
 
 **Como chegamos lá:** 20.555 vizinhanças · 7 variáveis · 4 algoritmos comparados · K-Means com 6 segmentos · estabilidade de 0,94 em 30 reamostragens.
 
@@ -109,6 +109,8 @@ Na conclusão (seção 10) avaliamos o que os resultados permitem afirmar sobre 
 Agrupar as vizinhanças da Califórnia em **segmentos de mercado acionáveis**, usando técnicas de clusterização (aprendizado não supervisionado), e traduzir cada segmento em uma estratégia de negócio.
 
 **O que queremos que um segmento represente:** um *tipo* de vizinhança (quem mora lá, como é a moradia e qual é o entorno), e não apenas uma região do mapa. Um "bairro rico no litoral" deve ser reconhecido como tal, esteja ele perto de Los Angeles ou de San Francisco.
+
+**Pergunta secundária (proposta pelo grupo):** *Quais segmentos do mercado imobiliário da Califórnia apresentam maior potencial de oportunidade considerando renda, características habitacionais, densidade populacional, localização e valor dos imóveis?* A resposta está na seção 9.6.
 
 ## Os dados
 

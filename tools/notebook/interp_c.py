@@ -127,13 +127,15 @@ INTERP["[[INTERP-MARKET]]"] = r'''
 - **S1 e S2 juntos têm 32% dos domicílios, mas só 19% do valor.** São mercados de volume, e não de valor.
 
 **Implicação:** a imobiliária precisa decidir entre **volume** (S1, S2, S4) e **valor por transação** (S6, S3, S5). Os segmentos permitem fazer essa escolha de forma explícita.
+
+> **Atenção:** o valor do estoque multiplica todos os domicílios pelo valor mediano das casas, que o Censo mede só nos imóveis ocupados pelos próprios donos. Nos segmentos em que o aluguel parece mais comum, como S3 e S2, o estoque tende a ficar superestimado. A comparação entre segmentos vale como ordem de grandeza.
 '''
 
 INTERP["[[INTERP-OPPORTUNITY]]"] = r'''
-- **O modelo de valor esperado é confiável:** R² de 0,87 na validação cruzada. A diferença entre preço real e esperado é informativa, e não ruído do modelo.
-- **Cerca de 1.700 block groups (8,5%) estão subvalorizados**, com preço 20% ou mais abaixo do que os seus fundamentos indicam.
-- **S3 tem a maior oportunidade:** **16% dos seus block groups estão subvalorizados** (cerca de 280 mil domicílios), em San Diego, Burbank e Culver City. É também o segmento com a maior dispersão de preço (IQR de 57% da mediana) e com mais casos sobrevalorizados (14%). Os preços de S3 ainda não se ajustaram aos fundamentos.
-- **S1 vem em segundo** (cerca de 12%, em Redding, Bakersfield e Yuba City): cidades do interior com fundamentos melhores que o preço.
+- **O modelo de valor esperado explica 87% da variação dos preços** (R² na validação cruzada). O que sobra, a diferença entre o preço real e o esperado, mistura oportunidade real, fatores que o Censo não mede (escolas, segurança, estado do imóvel) e erro do próprio modelo. Por isso, a marcação de subvalorizado é uma **lista de bairros a investigar**, e não uma garantia de preço baixo.
+- **Cerca de 1.700 block groups (perto de 8,5%) estão subvalorizados**, com preço 20% ou mais abaixo do que os seus fundamentos indicam. Uma fatia parecida (perto de 9%) está 25% ou mais acima: os desvios vão para os dois lados.
+- **S3 tem a maior proporção de subvalorizados:** **16% dos seus block groups** (cerca de 280 mil domicílios), em San Diego, Burbank e Culver City. Mas também tem a maior proporção de sobrevalorizados (14%) e a maior dispersão de preço (IQR de 57% da mediana). **Em S3, o preço é o que mais se afasta dos fundamentos, para os dois lados:** é onde avaliar bem cada imóvel mais faz diferença, com mais oportunidade e mais risco.
+- **S1 vem em segundo** (cerca de 12% subvalorizados, contra 10% sobrevalorizados), em Redding, Bakersfield e Yuba City.
 - **S4 combina crescimento com oportunidade:** 23% de casas novas e cerca de 8% de subvalorizados.
 - **S6 quase não tem subvalorizados (menos de 2%)**, mas isso é em parte um efeito do teto: o preço real de 38% dos seus block groups é desconhecido.
 

@@ -15,7 +15,7 @@ md(r'''
 
 ### Seis tipos de bairro, uma estratégia para cada um
 
-**Disciplina:** Aprendizado Não Supervisionado (Prof. Sergio Polimante) · Executive MBA em Business Analytics e Big Data · FGV
+**Disciplina:** Aprendizado Não Supervisionado (Prof. Sergio Polimante) · MBA em Inteligência Artificial e Analytics Aplicadas a Negócios · FGV
 
 **Integrantes:**
 

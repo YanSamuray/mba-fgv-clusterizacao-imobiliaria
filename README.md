@@ -4,7 +4,7 @@
 
 [![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YanSamuray/mba-fgv-clusterizacao-imobiliaria/blob/main/projetofinal.ipynb)
 
-Projeto final da disciplina **Aprendizado Não Supervisionado** (Prof. Sergio Polimante) do Executive MBA em Business Analytics e Big Data da **FGV**.
+Projeto final da disciplina **Aprendizado Não Supervisionado** (Prof. Sergio Polimante) do MBA em Inteligência Artificial e Analytics Aplicadas a Negócios da **FGV**.
 
 Aplicamos técnicas de clusterização a 20.640 vizinhanças do Censo dos EUA para substituir a segmentação tradicional, por cidade e faixa de preço, por **segmentos baseados no comportamento real dos bairros**. Cada segmento termina numa estratégia de negócio.
 
@@ -76,7 +76,6 @@ Python · pandas · scikit-learn · GeoPandas · Matplotlib · Seaborn · SciPy 
 | `tools/notebook/` | gerador do notebook: código e textos de cada seção, execução e checklist |
 | `assets/` | figuras usadas neste README |
 | `archive/` | versão anterior (apenas a preparação dos dados) |
-| `docs/` | enunciado do projeto |
 | `data/` | arquivos externos baixados pelo notebook e a segmentação exportada (fora do controle de versão) |
 
 ## Como reproduzir
